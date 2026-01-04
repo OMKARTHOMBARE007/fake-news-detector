@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TruthGuard AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .stat-card {
+            border: none;
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .recent-activity {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            padding: 1rem;
+            border-left: 4px solid #4361ee;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 2rem;
+        }
+        
+        .table th {
+            border-top: none;
+        }
+        
+        .badge-fake {
+            background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+            color: white;
+        }
+        
+        .badge-real {
+            background: linear-gradient(135deg, #4cc9f0 0%, #4361ee 100%);
+            color: white;
+        }
+        
+        .progress-thin {
+            height: 8px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt"></i> TruthGuard AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-6 fw-bold mb-3">Analytics Dashboard</h1>
+                    <p class="lead mb-0">Comprehensive insights into fake news and deepfake detection</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-light">Today</button>
+                        <button type="button" class="btn btn-outline-light">Week</button>
+                        <button type="button" class="btn btn-outline-light">Month</button>
+                        <button type="button" class="btn btn-outline-light">Year</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Overview -->
+    <section class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card shadow-sm bg-white">
+                        <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="stat-number">{{ stats.total_checks if stats else 1500 }}</div>
+                        <h6 class="text-muted">Total Checks</h6>
+                        <div class="small text-success">
+                            <i class="fas fa-arrow-up"></i> 12.5% from last month
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card shadow-sm bg-white">
+                        <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-number">{{ stats.fake_detected if stats else 320 }}</div>
+                        <h6 class="text-muted">Fake Content Detected</h6>
+                        <div class="small text-warning">
+                            <i class="fas fa-minus"></i> 3.2% from last month
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card shadow-sm bg-white">
+                        <div class="stat-icon bg-success bg-opacity-10 text-success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-number">{{ stats.accuracy if stats else 94.5 }}%</div>
+                        <h6 class="text-muted">Accuracy Rate</h6>
+                        <div class="small text-success">
+                            <i class="fas fa-arrow-up"></i> 2.1% from last month
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card shadow-sm bg-white">
+                        <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-number">2.4s</div>
+                        <h6 class="text-muted">Avg. Response Time</h6>
+                        <div class="small text-danger">
+                            <i class="fas fa-arrow-down"></i> 0.8s faster
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts & Analytics -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Detection Analysis Over Time</h5>
+                            <div class="chart-container">
+                                <canvas id="detectionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Content Distribution</h5>
+                            <div class="chart-container">
+                                <canvas id="contentDistributionChart"></canvas>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Text Articles</span>
+                                    <span class="fw-bold">65%</span>
+                                </div>
+                                <div class="progress progress-thin mb-3">
+                                    <div class="progress-bar bg-primary" style="width: 65%"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Images</span>
+                                    <span class="fw-bold">22%</span>
+                                </div>
+                                <div class="progress progress-thin mb-3">
+                                    <div class="progress-bar bg-success" style="width: 22%"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Videos</span>
+                                    <span class="fw-bold">13%</span>
+                                </div>
+                                <div class="progress progress-thin">
+                                    <div class="progress-bar bg-warning" style="width: 13%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Activity & Top Sources -->
+    <section class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="card-title mb-0">Recent Activity</h5>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                            </div>
+                            <div class="recent-activity">
+                                <div class="activity-item">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>Text Analysis</strong>
+                                        <span class="badge badge-fake">Fake</span>
+                                    </div>
+                                    <p class="mb-1">"Breaking: Shocking discovery about climate change!"</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock"></i> 5 minutes ago • 92% confidence
+                                    </small>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>Image Analysis</strong>
+                                        <span class="badge badge-real">Real</span>
+                                    </div>
+                                    <p class="mb-1">Deepfake detection on celebrity photo</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock"></i> 15 minutes ago • 87% confidence
+                                    </small>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>URL Analysis</strong>
+                                        <span class="badge badge-fake">Fake</span>
+                                    </div>
+                                    <p class="mb-1">https://example-news.com/sensational-article</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock"></i> 1 hour ago • 95% confidence
+                                    </small>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>Video Analysis</strong>
+                                        <span class="badge badge-fake">Fake</span>
+                                    </div>
+                                    <p class="mb-1">Political speech deepfake detection</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock"></i> 2 hours ago • 89% confidence
+                                    </small>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>Text Analysis</strong>
+                                        <span class="badge badge-real">Real</span>
+                                    </div>
+                                    <p class="mb-1">Scientific research article verification</p>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock"></i> 3 hours ago • 96% confidence
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="card-title mb-0">Top Fake News Sources</h5>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View Report</a>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Source</th>
+                                            <th>Fake Rate</th>
+                                            <th>Detections</th>
+                                            <th>Trend</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-globe text-danger me-2"></i>
+                                                sensationalnews.com
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">78%</span>
+                                                    <div class="progress progress-thin flex-grow-1">
+                                                        <div class="progress-bar bg-danger" style="width: 78%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>142</td>
+                                            <td>
+                                                <span class="text-danger">
+                                                    <i class="fas fa-arrow-up"></i> High
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-newspaper text-warning me-2"></i>
+                                                clickbait-daily.net
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">65%</span>
+                                                    <div class="progress progress-thin flex-grow-1">
+                                                        <div class="progress-bar bg-warning" style="width: 65%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>98</td>
+                                            <td>
+                                                <span class="text-warning">
+                                                    <i class="fas fa-minus"></i> Stable
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-video text-info me-2"></i>
+                                                viral-videos.org
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">52%</span>
+                                                    <div class="progress progress-thin flex-grow-1">
+                                                        <div class="progress-bar bg-info" style="width: 52%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>76</td>
+                                            <td>
+                                                <span class="text-success">
+                                                    <i class="fas fa-arrow-down"></i> Decreasing
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-share-alt text-secondary me-2"></i>
+                                                social-media-shared
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">45%</span>
+                                                    <div class="progress progress-thin flex-grow-1">
+                                                        <div class="progress-bar bg-secondary" style="width: 45%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>63</td>
+                                            <td>
+                                                <span class="text-warning">
+                                                    <i class="fas fa-arrow-up"></i> Increasing
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-link text-primary me-2"></i>
+                                                unknown-sources
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">38%</span>
+                                                    <div class="progress progress-thin flex-grow-1">
+                                                        <div class="progress-bar bg-primary" style="width: 38%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>45</td>
+                                            <td>
+                                                <span class="text-success">
+                                                    <i class="fas fa-minus"></i> Stable
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h6 class="mb-3">Detection Methods Performance</h6>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Machine Learning</span>
+                                    <span class="fw-bold">94.5%</span>
+                                </div>
+                                <div class="progress progress-thin mb-3">
+                                    <div class="progress-bar bg-success" style="width: 94.5%"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Rule-Based</span>
+                                    <span class="fw-bold">82.3%</span>
+                                </div>
+                                <div class="progress progress-thin mb-3">
+                                    <div class="progress-bar bg-warning" style="width: 82.3%"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Hybrid Approach</span>
+                                    <span class="fw-bold">96.1%</span>
+                                </div>
+                                <div class="progress progress-thin">
+                                    <div class="progress-bar bg-primary" style="width: 96.1%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats & Export -->
+    <section class="py-4">
+        <div class="container">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="text-muted mb-1">Total Real Content</div>
+                            <div class="h3 fw-bold text-success">1,180</div>
+                            <div class="small">Verified authentic</div>
+                        </div>
+                        
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="text-muted mb-1">Avg. Confidence</div>
+                            <div class="h3 fw-bold text-primary">91.2%</div>
+                            <div class="small">Across all detections</div>
+                        </div>
+                        
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            <div class="text-muted mb-1">Response Success</div>
+                            <div class="h3 fw-bold text-info">99.8%</div>
+                            <div class="small">Uptime reliability</div>
+                        </div>
+                        
+                        <div class="col-md-3 text-center">
+                            <div class="text-muted mb-1">User Satisfaction</div>
+                            <div class="h3 fw-bold text-warning">4.7/5.0</div>
+                            <div class="small">Based on feedback</div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">Data Export & Reports</h6>
+                            <p class="text-muted small mb-0">Export analytics data for further analysis</p>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary">
+                                <i class="fas fa-file-excel"></i> CSV
+                            </button>
+                            <button type="button" class="btn btn-outline-primary">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                            <button type="button" class="btn btn-outline-primary">
+                                <i class="fas fa-chart-bar"></i> JSON
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                <i class="fas fa-download"></i> Export All
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>TruthGuard AI</h5>
+                    <p class="text-muted mb-0">Advanced AI-powered fake news and deepfake detection</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">&copy; 2024 TruthGuard AI. All rights reserved.</p>
+                    <p class="text-muted small">Last updated: Today, 10:45 AM</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        // Initialize Detection Chart
+        const detectionCtx = document.getElementById('detectionChart').getContext('2d');
+        const detectionChart = new Chart(detectionCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Fake Detections',
+                    data: [45, 52, 48, 61, 58, 65, 72, 78, 75, 82, 85, 90],
+                    borderColor: '#f72585',
+                    backgroundColor: 'rgba(247, 37, 133, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Real Content',
+                    data: [155, 148, 152, 139, 142, 135, 128, 122, 125, 118, 115, 110],
+                    borderColor: '#4cc9f0',
+                    backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Detections'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Initialize Content Distribution Chart
+        const distributionCtx = document.getElementById('contentDistributionChart').getContext('2d');
+        const distributionChart = new Chart(distributionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Text Articles', 'Images', 'Videos'],
+                datasets: [{
+                    data: [65, 22, 13],
+                    backgroundColor: [
+                        '#4361ee',
+                        '#4cc9f0',
+                        '#ff9e00'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+        
+        // Update charts on window resize
+        window.addEventListener('resize', function() {
+            detectionChart.resize();
+            distributionChart.resize();
+        });
+        
+        // Simulate real-time updates
+        function updateStats() {
+            // This function would typically fetch new data from your API
+            console.log('Stats updated at ' + new Date().toLocaleTimeString());
+        }
+        
+        // Update stats every 30 seconds
+        setInterval(updateStats, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - TruthGuard AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .about-hero {
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            color: white;
+            padding: 5rem 0;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .team-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            background: white;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .team-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #4361ee, #3a0ca3);
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.6rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4361ee;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #4361ee;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .tech-item {
+            padding: 0.5rem 1.5rem;
+            background: #f8f9fa;
+            border-radius: 50px;
+            border: 2px solid #e9ecef;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-item:hover {
+            background: #4361ee;
+            color: white;
+            border-color: #4361ee;
+            transform: scale(1.05);
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: #4361ee;
+        }
+        
+        .accordion-button:focus {
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+            border-color: #4361ee;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt"></i> TruthGuard AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4">Combating Misinformation with AI</h1>
+                    <p class="lead mb-4">TruthGuard AI is an advanced platform that uses cutting-edge artificial intelligence to detect and combat fake news and deepfake media in real-time.</p>
+                    <div class="d-flex gap-3">
+                        <a href="/" class="btn btn-light btn-lg">
+                            <i class="fas fa-play-circle me-2"></i> Try Demo
+                        </a>
+                        <a href="#technology" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-code me-2"></i> Our Technology
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="position-relative">
+                        <i class="fas fa-shield-alt fa-10x text-white opacity-25"></i>
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <h2 class="text-white mb-0">AI</h2>
+                            <p class="text-white mb-0">Powered</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h2 class="mb-4">Our Mission</h2>
+                    <p class="lead mb-4">In today's digital age, misinformation spreads faster than ever before. Deepfake technology has made it increasingly difficult to distinguish between real and synthetic media.</p>
+                    <p>TruthGuard AI was founded with a single mission: to restore trust in digital content. We believe that everyone deserves access to accurate information and the tools to verify content authenticity.</p>
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                            <span>Advanced AI-powered detection algorithms</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                            <span>Real-time analysis and verification</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                            <span>Comprehensive reporting and insights</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-body p-4">
+                            <h4 class="mb-4 text-center">Why Detection Matters</h4>
+                            <div class="row text-center">
+                                <div class="col-md-6 mb-4">
+                                    <div class="stat-card">
+                                        <div class="stat-number">67%</div>
+                                        <p class="text-muted mb-0">of people encounter fake news weekly</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="stat-card">
+                                        <div class="stat-number">96%</div>
+                                        <p class="text-muted mb-0">deepfake accuracy improvement since 2019</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="stat-card">
+                                        <div class="stat-number">3x</div>
+                                        <p class="text-muted mb-0">faster spread of misinformation vs facts</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="stat-card">
+                                        <div class="stat-number">85%</div>
+                                        <p class="text-muted mb-0">of people worry about deepfake impact</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="mb-3">Our Technology Stack</h2>
+                <p class="lead">Powered by cutting-edge AI and machine learning algorithms</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="feature-icon bg-primary bg-opacity-10 text-primary">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4 class="mb-3">Machine Learning Models</h4>
+                            <p class="text-muted">Our system employs ensemble learning with multiple ML algorithms including Random Forests, SVMs, and Neural Networks trained on thousands of verified samples.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>BERT for text analysis</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>CNN for image detection</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>LSTM for temporal analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="feature-icon bg-danger bg-opacity-10 text-danger">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h4 class="mb-3">Deepfake Detection</h4>
+                            <p class="text-muted">Advanced computer vision algorithms analyze facial features, eye blinking patterns, lip sync accuracy, and texture inconsistencies to detect synthetic media.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Face landmark detection</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Frame-by-frame analysis</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Audio-visual synchronization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="feature-icon bg-success bg-opacity-10 text-success">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h4 class="mb-3">Data Intelligence</h4>
+                            <p class="text-muted">Continuous learning from a growing database of verified content, with real-time updates from fact-checking organizations and trusted sources worldwide.</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Real-time data ingestion</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Cross-source verification</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Historical pattern analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tech Stack Tags -->
+            <div class="text-center mt-5">
+                <h5 class="mb-4">Technologies We Use</h5>
+                <div class="tech-stack">
+                    <span class="tech-item">Python</span>
+                    <span class="tech-item">TensorFlow</span>
+                    <span class="tech-item">PyTorch</span>
+                    <span class="tech-item">OpenCV</span>
+                    <span class="tech-item">Flask</span>
+                    <span class="tech-item">Scikit-learn</span>
+                    <span class="tech-item">BERT</span>
+                    <span class="tech-item">CNN</span>
+                    <span class="tech-item">LSTM</span>
+                    <span class="tech-item">Docker</span>
+                    <span class="tech-item">PostgreSQL</span>
+                    <span class="tech-item">Redis</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="mb-3">How TruthGuard AI Works</h2>
+                <p class="lead">Three-step process to verify content authenticity</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-upload fa-2x text-primary"></i>
+                        </div>
+                        <h4 class="mb-3">1. Content Submission</h4>
+                        <p class="text-muted">Users submit text, URLs, images, or videos through our web interface, API, or browser extension.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="text-center">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-cogs fa-2x text-warning"></i>
+                        </div>
+                        <h4 class="mb-3">2. AI Analysis</h4>
+                        <p class="text-muted">Multiple AI models analyze the content simultaneously, checking for inconsistencies and synthetic patterns.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <div class="text-center">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-chart-bar fa-2x text-success"></i>
+                        </div>
+                        <h4 class="mb-3">3. Detailed Report</h4>
+                        <p class="text-muted">Users receive a comprehensive report with confidence scores, detection methods, and detailed insights.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <div class="accordion" id="processAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                View Detailed Process Flow
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#processAccordion">
+                            <div class="accordion-body">
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <h5>Content Ingestion</h5>
+                                        <p class="text-muted mb-0">Content is received and pre-processed for analysis</p>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <h5>Feature Extraction</h5>
+                                        <p class="text-muted mb-0">Key features are extracted using NLP and computer vision techniques</p>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <h5>Multi-Model Analysis</h5>
+                                        <p class="text-muted mb-0">Multiple AI models analyze content simultaneously</p>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <h5>Ensemble Decision</h5>
+                                        <p class="text-muted mb-0">Results from all models are combined for final decision</p>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <h5>Report Generation</h5>
+                                        <p class="text-muted mb-0">Detailed report with confidence scores is generated</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="mb-3">Our Team</h2>
+                <p class="lead">Experts in AI, cybersecurity, and digital forensics</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="team-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             class="team-img" alt="Dr. Sarah Chen">
+                        <div class="card-body p-4">
+                            <h5 class="mb-1">Dr. Sarah Chen</h5>
+                            <p class="text-muted mb-2">Lead AI Researcher</p>
+                            <p class="small">PhD in Computer Science with 10+ years in machine learning and natural language processing.</p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="text-primary"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-primary"><i class="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="team-card">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             class="team-img" alt="Michael Rodriguez">
+                        <div class="card-body p-4">
+                            <h5 class="mb-1">Michael Rodriguez</h5>
+                            <p class="text-muted mb-2">Cybersecurity Expert</p>
+                            <p class="small">Former cybersecurity analyst with expertise in digital forensics and threat intelligence.</p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="text-primary"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-primary"><i class="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="team-card">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             class="team-img" alt="Priya Sharma">
+                        <div class="card-body p-4">
+                            <h5 class="mb-1">Priya Sharma</h5>
+                            <p class="text-muted mb-2">Data Scientist</p>
+                            <p class="small">Specializes in computer vision and deep learning with focus on media authentication.</p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="text-primary"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-primary"><i class="fab fa-github"></i></a>
+                                <a href="#" class="text-primary"><i class="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="mb-3">Frequently Asked Questions</h2>
+                <p class="lead">Get answers to common questions about our platform</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                    How accurate is TruthGuard AI?
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Our current models achieve 94.5% accuracy on benchmark datasets. However, accuracy varies based on content type and quality. We continuously train our models on new data to improve performance.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                    What types of content can I analyze?
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    You can analyze text articles, news URLs, images (JPG, PNG, GIF), and videos (MP4, AVI, MOV). We support files up to 50MB in size.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                    Is my data private and secure?
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes. We take data privacy seriously. Uploaded content is processed anonymously and automatically deleted after analysis. We don't store personal information or share data with third parties.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                                    How does deepfake detection work?
+                                </button>
+                            </h2>
+                            <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Our deepfake detection analyzes facial features, eye blinking patterns, lip sync accuracy, skin texture, and lighting inconsistencies. For videos, we also check temporal coherence across frames.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq5">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
+                                    Can I integrate TruthGuard AI into my application?
+                                </button>
+                            </h2>
+                            <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! We offer API access for developers. Contact us for API documentation and integration support. We also provide browser extensions and SDKs for various platforms.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq6">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
+                                    How often are your models updated?
+                                </button>
+                            </h2>
+                            <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    We retrain our models weekly with new data from verified sources. Major updates are deployed monthly. Our system also adapts in real-time to emerging patterns of misinformation.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="mb-4">Ready to Combat Misinformation?</h2>
+            <p class="lead mb-4">Join thousands of users and organizations who trust TruthGuard AI for content verification</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="/" class="btn btn-light btn-lg">
+                    <i class="fas fa-play-circle me-2"></i> Try Free Demo
+                </a>
+                <a href="#" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-book me-2"></i> Read Documentation
+                </a>
+                <a href="#" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-envelope me-2"></i> Contact Sales
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">TruthGuard AI</h5>
+                    <p class="text-muted">Advanced AI-powered platform for detecting fake news and deepfake media.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-github fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="mb-3">Platform</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/" class="text-muted text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="/dashboard" class="text-muted text-decoration-none">Dashboard</a></li>
+                        <li class="mb-2"><a href="/about" class="text-muted text-decoration-none">About</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">API Docs</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="mb-3">Resources</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Research Papers</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Blog</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Case Studies</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Help Center</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <h5 class="mb-3">Contact</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> contact@truthguard.ai</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> San Francisco, CA</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-secondary my-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">&copy; 2024 TruthGuard AI. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-muted text-decoration-none me-3">Privacy Policy</a>
+                    <a href="#" class="text-muted text-decoration-none">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

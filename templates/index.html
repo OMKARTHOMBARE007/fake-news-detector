@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fake News & Deepfake Detector</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt"></i> TruthGuard AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center py-5">
+            <h1 class="display-4 mb-4">AI-Powered Fake News & Deepfake Detection</h1>
+            <p class="lead mb-4">Detect misinformation and synthetic media with advanced artificial intelligence</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <i class="fas fa-newspaper fa-3x mb-3 text-primary"></i>
+                            <h3>Fake News Detection</h3>
+                            <p>Analyze text or URLs for misinformation</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <i class="fas fa-video fa-3x mb-3 text-danger"></i>
+                            <h3>Deepfake Detection</h3>
+                            <p>Detect AI-generated images and videos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detection Section -->
+    <section class="detection-section">
+        <div class="container">
+            <div class="row">
+                <!-- Fake News Detection -->
+                <div class="col-lg-6 mb-5">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0"><i class="fas fa-search"></i> Fake News Detector</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="nav nav-tabs mb-3" id="newsTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="text-tab" data-bs-toggle="tab" data-bs-target="#text">Text Analysis</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="url-tab" data-bs-toggle="tab" data-bs-target="#url">URL Analysis</button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content">
+                                <!-- Text Analysis Tab -->
+                                <div class="tab-pane fade show active" id="text">
+                                    <form id="textAnalysisForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Enter News Text:</label>
+                                            <textarea class="form-control" id="newsText" rows="6" placeholder="Paste news article text here..."></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Detection Method:</label>
+                                            <select class="form-select" id="detectionMethod">
+                                                <option value="ml">Machine Learning</option>
+                                                <option value="rule">Rule-Based</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-analytics"></i> Analyze Text
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                                <!-- URL Analysis Tab -->
+                                <div class="tab-pane fade" id="url">
+                                    <form id="urlAnalysisForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Enter News URL:</label>
+                                            <input type="url" class="form-control" id="newsUrl" placeholder="https://example.com/news-article">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-link"></i> Analyze URL
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- Results Container -->
+                            <div id="newsResults" class="mt-4" style="display: none;">
+                                <!-- Results will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deepfake Detection -->
+                <div class="col-lg-6 mb-5">
+                    <div class="card shadow">
+                        <div class="card-header bg-danger text-white">
+                            <h4 class="mb-0"><i class="fas fa-video"></i> Deepfake Detector</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="deepfakeForm" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label class="form-label">Upload Image or Video:</label>
+                                    <input type="file" class="form-control" id="mediaFile" accept="image/*,video/*">
+                                    <div class="form-text">
+                                        Supported: JPG, PNG, GIF, MP4, AVI (Max 50MB)
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <div class="card text-center p-3">
+                                            <i class="fas fa-image fa-2x mb-2"></i>
+                                            <h6>Image Analysis</h6>
+                                            <small>Detect AI-generated faces</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card text-center p-3">
+                                            <i class="fas fa-film fa-2x mb-2"></i>
+                                            <h6>Video Analysis</h6>
+                                            <small>Analyze video frames</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-danger w-100">
+                                    <i class="fas fa-play-circle"></i> Detect Deepfake
+                                </button>
+                            </form>
+                            
+                            <!-- Preview -->
+                            <div id="mediaPreview" class="mt-3 text-center" style="display: none;">
+                                <img id="imagePreview" class="img-fluid rounded" style="max-height: 200px;">
+                                <video id="videoPreview" class="img-fluid rounded" controls style="max-height: 200px; display: none;"></video>
+                            </div>
+                            
+                            <!-- Results Container -->
+                            <div id="deepfakeResults" class="mt-4" style="display: none;">
+                                <!-- Results will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Advanced Detection Features</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-brain fa-3x mb-3 text-primary"></i>
+                            <h4>AI-Powered Analysis</h4>
+                            <p>Uses machine learning models trained on thousands of samples</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-bolt fa-3x mb-3 text-warning"></i>
+                            <h4>Real-time Detection</h4>
+                            <p>Get instant results with detailed confidence scores</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-bar fa-3x mb-3 text-success"></i>
+                            <h4>Detailed Reports</h4>
+                            <p>Comprehensive analysis with visual indicators</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>TruthGuard AI</h5>
+                    <p>Combating misinformation with artificial intelligence</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2024 TruthGuard AI. All rights reserved.</p>
+                    <p class="text-muted">Accuracy: 94.5% | Articles Analyzed: 1500+</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
